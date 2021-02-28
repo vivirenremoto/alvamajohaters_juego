@@ -154,7 +154,7 @@
     </audio>
 
     <audio id="sound_attack2">
-        <source src="static/sound_attack2.mp3" type="audio/mp3">
+        <source src="static/sound_attack2b.mp3" type="audio/mp3">
     </audio>
 
 
@@ -315,7 +315,7 @@
             cell_width = parseInt($('#table td:first').css('width'));
             cell_height = parseInt($('#table td:first').css('height'));
 
-            $('#player').css('width', cell_width + 3).css('height', cell_height + 4);
+            $('#player').css('width', cell_width + 3).css('height', cell_height + 3);
             $('td').css('width', cell_width).css('height', cell_height);
 
 
@@ -407,18 +407,18 @@
 
 
                         timer_player = setTimeout(function () {
-                            $('#player').removeClass('player_angry').removeClass('player_angry1').removeClass('player_angry2');
 
 
                             if (rand_animation == 1) {
-                                $('#player').addClass('player_normal1');
+                                $('#player').removeClass('player_normal2').addClass('player_normal1');
                             } else {
-                                $('#player').addClass('player_normal2');
+                                $('#player').removeClass('player_normal1').addClass('player_normal2');
                             }
 
 
+                            $('#player').removeClass('player_angry').removeClass('player_angry1').removeClass('player_angry2');
 
-                        }, 2000);
+                        }, 900);
 
 
                     });
