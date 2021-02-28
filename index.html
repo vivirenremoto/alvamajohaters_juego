@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Alva Majo VS Haters - Juego</title>
+    <title>Alva Majo - El lanzamiento de Pureya</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 
@@ -15,20 +15,26 @@
 
     <script src="https://cdn.jsdelivr.net/gh/mathusummut/confetti.js/confetti.min.js"></script>
 
-    <script src="https://vivirenremoto.github.io/esttik_juego/static/jquery.animateNumbers.min.js"></script>
+    <script src="static/jquery.animateNumbers.min.js"></script>
 
 
     <link rel="prefetch" href="static/animacion1.gif" />
     <link rel="prefetch" href="static/animacion2.gif" />
+    <link rel="prefetch" href="static/normal1.gif" />
+    <link rel="prefetch" href="static/normal2.gif" />
+    <link rel="prefetch" href="static/music2.mp3" />
+    <link rel="prefetch" href="static/sound_attack1.mp3" />
+    <link rel="prefetch" href="static/sound_attack2b.mp3" />
 
 
-    <meta property="og:image" content="https://vivirenremoto.github.io/camino_a_andorra/static/social.png">
-    <meta property="og:image:secure_url" content="https://vivirenremoto.github.io/camino_a_andorra/static/social.png">
-    <meta property="og:image:alt" content="Juego - Camino a Andorra - Se un auténtico youtuber">
+    <meta property="og:image" content="https://vivirenremoto.github.io/alvamajohaters_juego/static/social.png">
+    <meta property="og:image:secure_url"
+        content="https://vivirenremoto.github.io/alvamajohaters_juego/static/social.png">
+    <meta property="og:image:alt" content="Alva Majo - El lanzamiento de Pureya">
     <meta property="og:image:type" content="image/png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Juego - Camino a Andorra - Se un auténtico youtuber">
-    <meta name="twitter:image" content="https://vivirenremoto.github.io/camino_a_andorra/static/social.png">
+    <meta name="twitter:title" content="Alva Majo - El lanzamiento de Pureya">
+    <meta name="twitter:image" content="https://vivirenremoto.github.io/alvamajohaters_juego/static/social.png">
 
 
 </head>
@@ -38,7 +44,14 @@
 
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3D8KLSY12D"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
+        gtag('config', 'G-3D8KLSY12D');
+    </script>
 
 
     <style>
@@ -97,6 +110,13 @@
             text-transform: uppercase;
         }
 
+        .btn_primary {
+
+            background: white;
+            color: black;
+            border-color: white;
+        }
+
         .flip-horizontal {
             -moz-transform: scaleX(-1);
             -webkit-transform: scaleX(-1);
@@ -110,12 +130,12 @@
 
 
         .player_normal1 {
-            background-image: url('static/normal1.png');
+            background-image: url('static/normal1.gif');
         }
 
 
         .player_normal2 {
-            background-image: url('static/normal2.png?ff');
+            background-image: url('static/normal2.gif');
         }
 
 
@@ -135,6 +155,11 @@
         .cell_normal {
             background-color: red;
             background-image: none;
+        }
+
+        .btn_social {
+            margin: 10px;
+            cursor: pointer;
         }
 
         #table {
@@ -172,20 +197,20 @@
 
 
 
-        #intro {
-            position: fixed;
-            text-align: center;
-            z-index: 99;
-            color: white;
-        }
-
-
+        #intro,
         #result {
             position: fixed;
-            display: none;
+            text-align: center;
+            color: white;
+            font-size: 40px;
             text-align: center;
             color: white;
 
+        }
+
+        #result {
+
+            display: none;
         }
 
         #leaderboard {
@@ -258,9 +283,6 @@
                 border-radius: 0;
                 width: 100%;
                 margin-bottom: 0;
-                background: white;
-                color: black;
-                border-color: white;
             }
 
             #leaderboard_table {
@@ -303,8 +325,6 @@
             #result,
             #intro {
                 margin-left: -240px;
-                top: 5%;
-                bottom: 5%;
             }
 
 
@@ -312,11 +332,21 @@
         }
     </style>
 
-    <!-- style="position:fixed;left:0;right:0;top:0;bottom:0;"-->
     <div id="intro">
-        <img src="http://i3.ytimg.com/vi/t9ewTfu3K6g/hqdefault.jpg">
-        <button onclick="startGame()" style="color:black;background:white">Jugar</button>
+        <br>
+        <img src="static/social.jpg" height="189">
+        <br>
+        <br>
+        <button onclick="startGame()" class="btn_primary">Jugar</button>
         <button onclick="showLeaderboard()">🏆 Ranking</button>
+        <button onclick="window.open('https://youtube.com')">Vídeo</button>
+
+        Compartir
+        <br>
+        <img src="static/shareIcons/twitter.png" class="btn_social" alt="twitter">
+        <img src="static/shareIcons/facebook.png" class="btn_social" alt="facebook">
+        <img src="static/shareIcons/whatsapp.png" class="btn_social" alt="whatsapp">
+
 
     </div>
 
@@ -338,9 +368,7 @@
 
     </div>
 
-    <!--position:fixed;left:0;right:0;top:0;bottom:0;-->
-
-    <div id="result" style="font-size:40px;text-align:center;color:white;display:none;">
+    <div id="result" style="display:none;">
 
         <br>
         <img src="static/end.png" width="200">
@@ -354,13 +382,22 @@
             <button onclick="location.reload()">Repetir</button>
             <button id="btn_save">Guardar puntuación</button>
             <button onclick="showLeaderboard()">Ranking</button>
+
+            Compartir
+            <br>
+            <img src="static/shareIcons/twitter.png" class="btn_social" alt="twitter">
+            <img src="static/shareIcons/facebook.png" class="btn_social" alt="facebook">
+            <img src="static/shareIcons/whatsapp.png" class="btn_social" alt="whatsapp">
+
+
         </div>
+
 
     </div>
 
 
     <div id="leaderboard">
-        <h2>Ranking</h2>
+        <h2 style="font-size:40px">Ranking</h2>
         <table id="leaderboard_table" width="100%" cellpadding="5" cellspacing="1" bgcolor="white">
             <tr>
                 <td>Pos</td>
@@ -393,7 +430,7 @@
 
 
     <script>
-        var time_left = 2;// 30;
+        var time_left = 30;// 30;
         var timer_time;
         var timer_enemies;
         var game_played = false;
@@ -420,6 +457,10 @@
         var sound_attack1 = $('#sound_attack1')[0];
         var sound_attack2 = $('#sound_attack2')[0];
         var music_playing = false;
+
+        if (document.location.href.indexOf('test')) {
+            time_left = 5;
+        }
 
 
         function randomNumber(min, max) {
@@ -554,7 +595,7 @@
             cell_height = parseInt($('#table td:first').css('height'));
 
             $('#player').css('width', cell_width + 3).css('height', cell_height + 3);
-            $('td').css('width', cell_width).css('height', cell_height);
+            $('#table td').css('width', cell_width).css('height', cell_height);
 
 
 
@@ -576,7 +617,7 @@
                 */
             });
 
-            $('td').click(function (e) {
+            $('#table td').click(function (e) {
 
                 if ($(this).hasClass('cell_enemy')) {
 
@@ -732,9 +773,11 @@
                             if (nickname) {
                                 $.ajax({
                                     type: "POST",
-                                    url: "https://jankosspears.vivirenremoto.comDD/?action=add",
+                                    url: "https://games.vivirenremoto.com/",
                                     dataType: "json",
                                     data: {
+                                        action: 'add',
+                                        game: 'alva',
                                         name: nickname,
                                         score: score
                                     },
@@ -776,12 +819,16 @@
 
         function showLeaderboard() {
 
+            $('#intro').hide();
+            $('#result').hide();
+            $('#leaderboard').show();
+
             var total_rows = $("#leaderboard_table tr").length;
 
 
             if (total_rows == 1) {
 
-                $.getJSON("https://jankosspears.vivirenremoto.com/?action=rank", function (data) {
+                $.getJSON("https://games.vivirenremoto.com/?game=alva&action=rank", function (data) {
                     var items = [];
                     $.each(data, function (key, val) {
 
@@ -833,7 +880,36 @@
             $('#leaderboard').hide();
         }
 
-        //startGame();
+
+
+        $(function () {
+            $('.btn_social').click(function () {
+                var network = $(this).attr('alt');
+                var share_url = document.location.href;
+
+
+                var share_message = document.title;
+                if (score) {
+                    share_message += ' 👊 ¡Supera mi puntuación! 🔥' + score;
+                }
+                share_message = encodeURIComponent(share_message);
+
+                if (network == 'twitter') {
+                    share_url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(share_message) + '&tw_p=tweetbutton&url=' + share_url;
+
+                } else if (network == 'facebook') {
+                    share_url = 'https://www.facebook.com/sharer/sharer.php?u=' + share_url + '&quote=' + encodeURIComponent(share_message);
+
+                } if (network == 'whatsapp') {
+                    share_url = 'whatsapp://send?text=' + encodeURIComponent(share_message + ' ' + share_url);
+                }
+
+
+                window.open(share_url);
+
+            });
+
+        });
 
     </script>
 
