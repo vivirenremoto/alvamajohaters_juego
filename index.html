@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/gh/mathusummut/confetti.js/confetti.min.js"></script>
+
+
+    <link rel="prefetch" href="static/animacion1.gif" />
+    <link rel="prefetch" href="static/animacion2.gif" />
+
+</head>
+
+<body>
+
+    <style>
+        body {
+            background: black;
+        }
+
+        td {
+            background: red;
+            background-size: 200% auto;
+            background-repeat: no-repeat;
+            background-position: center center;
+            vertical-align: bottom;
+            text-align: center;
+            font-size: 20px;
+        }
+
+
+        .flip-horizontal {
+            -moz-transform: scaleX(-1);
+            -webkit-transform: scaleX(-1);
+            -o-transform: scaleX(-1);
+            transform: scaleX(-1);
+            -ms-filter: fliph;
+            /*IE*/
+            filter: fliph;
+            /*IE*/
+        }
+
+
+        .player_normal1 {
+            background-image: url('static/normal1.png');
+        }
+
+
+        .player_normal2 {
+            background-image: url('static/normal2.png?ff');
+        }
+
+
+        .player_angry1 {
+            background-image: url('static/animacion1.gif');
+        }
+
+        .player_angry2 {
+            background-image: url('static/animacion2.gif');
+        }
+
+        .cell_enemy {
+            background-color: white;
+            background-image: url('static/walking.gif');
+        }
+
+        .cell_normal {
+            background-color: red;
+            background-image: none;
+        }
+
+        #table {
+            width: 480px;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            border-top: 70px black solid;
+        }
+
+        #header {
+            font-size: 50px;
+            color: white;
+            width: 480px;
+            left: 50%;
+            margin-left: -240px;
+            top: 0;
+            z-index: 2;
+            position: fixed;
+        }
+
+
+        #score_bar {
+            display: inline-block;
+            width: 48%;
+            text-align: left;
+        }
+
+        #time_bar {
+            display: inline-block;
+            width: 48%;
+            text-align: right;
+        }
+
+        /* responsive */
+
+        @media screen and (max-width: 480px) {
+
+            #header {
+                font-size: 50px;
+                color: white;
+                width: 100%;
+                left: 0;
+                right: 0;
+                margin-left: 0;
+            }
+
+        }
+    </style>
+
+
+
+
+    <div id="header">
+        <div id="score_bar">👊<span id="score">0</span></div>
+        <div id="time_bar">⏰<span id="time">0:30</span></div>
+    </div>
+
+
+    <table id="table">
+    </table>
+
+    <div id="player" class="player_normal1"
+        style="display:none;position:fixed;top:0;left:0;background-size:cover;width:70px;height:70px;">
+
+    </div>
+
+
+
+
+    <audio id="music" loop>
+        <source src="static/music.mp3" type="audio/mp3">
+    </audio>
+
+    <audio id="sound_attack1">
+        <source src="static/sound_attack1.mp3" type="audio/mp3">
+    </audio>
+
+    <audio id="sound_attack2">
+        <source src="static/sound_attack2.mp3" type="audio/mp3">
+    </audio>
+
+
+
+
+    <script>
+        var time_left = 30;
+        var timer_time;
+        var timer_enemies;
+
+        var current_col = 0;
+        var cols = 3;
+        var rows = 4;
+        var total_cells = cols * rows;
+        var max_enemies = total_cells - 5;// parseInt(total_cells / 3);
+        var score = 0;
+        var timer_player;
+
+
+        var screen_height = $(document).height();
+        var screen_width = $(document).width();
+        var screen_half = $(document).width() / 2;
+        var table_left;
+        var header_height = 70;
+
+        var cell_width;
+        var cell_height;
+
+        var music = $('#music')[0];
+        var sound_attack1 = $('#sound_attack1')[0];
+        var sound_attack2 = $('#sound_attack2')[0];
+        var music_playing = false;
+
+
+        function randomNumber(min, max) {
+            if (min > max) {
+                let temp = max;
+                max = min;
+                min = temp;
+            }
+
+            if (min <= 0) {
+                return Math.floor(Math.random() * (max + Math.abs(min) + 1)) + min;
+            } else {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+        }
+
+
+        function updateTime() {
+
+            timer_time = setInterval(function () {
+
+                time_left--;
+
+
+                if (time_left == 0) {
+                    endGame();
+                }
+
+                if (time_left < 10) time_left = '0' + time_left;
+
+                $('#time').html('0:' + time_left);
+            }, 1000);
+        }
+
+        function showEnemies(timeout_on) {
+
+            //var total_enemies = $('.cell_enemy').length;
+
+            //if (total_enemies <= max_enemies) {
+
+
+
+
+
+            var random_cell = randomNumber(0, total_cells - 1);
+
+            var random_stars = randomNumber(0, 2);
+            var html_stars = '';
+            for (var i = 0; i < random_stars; i++) {
+                html_stars += '★';
+            }
+            for (var i = 0; i < 5 - random_stars; i++) {
+                html_stars += '✰';
+            }
+
+
+
+            jQuery('#table td:eq(' + random_cell + ')').removeClass('cell_normal').addClass('cell_enemy').html(html_stars);
+
+            if (time_left && timeout_on) {
+                setTimeout(function () {
+                    showEnemies(false);
+                }, 300);
+            }
+
+
+            //setTimeout(removeCell, 3000, random_cell);
+
+            //}
+
+
+
+
+        }
+
+        /*
+                function removeCell(j) {
+        
+                    console.log(j);
+                    //var total_enemies = $('.cell_enemy').length;
+                    //var random_cell = randomNumber(0, total_enemies);
+        
+        
+                    //var current_cell = jQuery('#table td.cell_enemy:eq(' + random_cell + ')');
+        
+                    var current_cell = jQuery('#table td:eq(' + j + ')');
+        
+                    console.log($(current_cell).hasClass('cell_enemy'));
+        
+                    if ($(current_cell).hasClass('cell_enemy')) {
+                        $(this).removeClass('cell_enemy').addClass('cell_normal').html(' ');
+        
+                    }
+                }
+                */
+
+
+
+
+
+        function startGame() {
+
+
+            var html = '';
+            for (var i = 0; i < rows; i++) {
+                html += '<tr>';
+                for (var j = 0; j < cols; j++) {
+                    html += '<td nowrap="nowrap" data-col="' + j + '"> </td>';
+                }
+                html += '</tr>';
+            }
+            $('#table').append(html);
+
+
+            if (screen_width > 800) {
+                table_left = (screen_width - (parseInt($('#table').css('width')))) / 2;
+            } else {
+                table_left = 0;
+                $('#table').css('width', screen_width);
+            }
+
+            $('#table').css('left', table_left);
+            $('#player').css('left', table_left).css('top', header_height);
+
+
+            cell_width = parseInt($('#table td:first').css('width'));
+            cell_height = parseInt($('#table td:first').css('height'));
+
+            $('#player').css('width', cell_width + 3).css('height', cell_height + 4);
+            $('td').css('width', cell_width).css('height', cell_height);
+
+
+
+
+
+
+            $('body').click(function (e) {
+                if (!music_playing) {
+                    music.play();
+                }
+
+
+                /*
+                if (e.pageY < screen_half) {
+                    $('#player').removeClass('flip-horizontal');
+                } else {
+                    $('#player').addClass('flip-horizontal');
+                }
+                */
+            });
+
+            $('td').click(function (e) {
+
+                if ($(this).hasClass('cell_enemy')) {
+
+
+                    var now_col = $(this).data('col');
+                    if (now_col > current_col) {
+                        $('#player').addClass('flip-horizontal');
+                    } else if (now_col < current_col) {
+                        $('#player').removeClass('flip-horizontal');
+                    }
+                    current_col = now_col;
+
+
+                    clearInterval(timer_player);
+
+                    score++;
+
+                    $('#score').html(score);
+
+                    $(this).removeClass('cell_enemy').addClass('cell_normal').html(' ');
+
+                    showEnemies(false);
+
+                    var rand_lucky = randomNumber(0, 1);
+
+                    if (rand_lucky) {
+                        showEnemies(false);
+                    }
+
+                    var pos_x = $(this).position().left;
+                    var pos_y = $(this).position().top + header_height;
+
+                    //pos_x += ((cell_width - parseInt($('#player').css('width'))) / 2) + table_left;
+                    //pos_y += (cell_height - parseInt($('#player').css('height'))) / 2;
+
+                    pos_x += table_left;
+
+                    //$('#player').css('left', pos_x).css('top', pos_y);
+
+
+                    var rand_animation = score % 2 == 0 ? 2 : 1;// randomNumber(1, 2);
+
+                    var sound;
+
+                    if (rand_animation == 1) {
+                        sound = sound_attack1;
+                    } else {
+                        sound = sound_attack2;
+                    }
+
+                    sound.currentTime = 0;
+                    sound.play();
+
+
+                    console.log(rand_animation);
+
+
+                    $('#player').removeClass('player_normal1').removeClass('player_normal2').addClass('player_angry').removeClass('player_angry1').removeClass('player_angry2').addClass('player_angry' + rand_animation);
+
+
+
+                    $('#player').stop().show().animate({
+                        'left': pos_x,
+                        'top': pos_y,
+                    }, 250, function () {
+
+
+                        timer_player = setTimeout(function () {
+                            $('#player').removeClass('player_angry').removeClass('player_angry1').removeClass('player_angry2');
+
+
+                            if (rand_animation == 1) {
+                                $('#player').addClass('player_normal1');
+                            } else {
+                                $('#player').addClass('player_normal2');
+                            }
+
+
+
+                        }, 2000);
+
+
+                    });
+
+                }
+
+            });
+
+
+
+            /*
+            var timer_enemies = setInterval(function () {
+
+
+                var total_enemies = $('.cell_enemy').length - 1;
+                var random_cell = randomNumber(0, total_enemies);
+
+                console.log(random_cell);
+
+                var current_cell = $('.cell_enemy:eq(' + random_cell + ')');
+
+                if ($(current_cell).hasClass('cell_enemy')) {
+                    $(current_cell).removeClass('cell_enemy').addClass('cell_normal').html(' ');
+                    //showEnemies(false);
+                }
+
+
+
+            }, 2500);
+            */
+
+
+
+            showEnemies(true);
+            showEnemies(false);
+            showEnemies(false);
+
+            updateTime();
+
+        }
+
+        function endGame() {
+
+            clearInterval(timer_enemies);
+            clearInterval(timer_time);
+            time_left = 0;
+
+
+
+            confetti.start();
+
+            setTimeout(function () {
+                confetti.stop();
+            }, 1000);
+
+        }
+
+
+        startGame();
+
+    </script>
+
+</body>
+
+</html>
