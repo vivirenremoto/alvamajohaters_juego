@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title></title>
+    <title>Alva Majo VS Haters - Juego</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 
@@ -10,19 +10,65 @@
         integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 
 
+
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
     <script src="https://cdn.jsdelivr.net/gh/mathusummut/confetti.js/confetti.min.js"></script>
+
+    <script src="https://vivirenremoto.github.io/esttik_juego/static/jquery.animateNumbers.min.js"></script>
 
 
     <link rel="prefetch" href="static/animacion1.gif" />
     <link rel="prefetch" href="static/animacion2.gif" />
 
+
+    <meta property="og:image" content="https://vivirenremoto.github.io/camino_a_andorra/static/social.png">
+    <meta property="og:image:secure_url" content="https://vivirenremoto.github.io/camino_a_andorra/static/social.png">
+    <meta property="og:image:alt" content="Juego - Camino a Andorra - Se un auténtico youtuber">
+    <meta property="og:image:type" content="image/png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Juego - Camino a Andorra - Se un auténtico youtuber">
+    <meta name="twitter:image" content="https://vivirenremoto.github.io/camino_a_andorra/static/social.png">
+
+
 </head>
 
 <body>
 
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+
     <style>
+        * {
+            font-family: 'VT323', monospace;
+            text-transform: uppercase;
+
+            -webkit-touch-callout: none;
+            /* iOS Safari */
+            -webkit-user-select: none;
+            /* Safari */
+            -khtml-user-select: none;
+            /* Konqueror HTML */
+            -moz-user-select: none;
+            /* Old versions of Firefox */
+            -ms-user-select: none;
+            /* Internet Explorer/Edge */
+            user-select: none;
+            /* Non-prefixed version, currently
+                            supported by Chrome, Edge, Opera and Firefox */
+        }
+
+
         body {
             background: black;
+            touch-action: pan-x pan-y;
+        }
+
+        img {
+            max-width: 100%;
         }
 
         td {
@@ -35,6 +81,21 @@
             font-size: 20px;
         }
 
+        button {
+            display: block;
+            border: 5px white solid;
+            color: white;
+            background: black;
+            padding: 5px 30px;
+            margin: auto;
+            margin-bottom: 20px;
+            width: 300px;
+            font-size: 30px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
 
         .flip-horizontal {
             -moz-transform: scaleX(-1);
@@ -99,19 +160,50 @@
 
         #score_bar {
             display: inline-block;
-            width: 48%;
+            width: 47%;
             text-align: left;
         }
 
         #time_bar {
             display: inline-block;
-            width: 48%;
+            width: 47%;
             text-align: right;
+        }
+
+
+
+        #intro {
+            position: fixed;
+            text-align: center;
+            z-index: 99;
+            color: white;
+        }
+
+
+        #result {
+            position: fixed;
+            display: none;
+            text-align: center;
+            color: white;
+
+        }
+
+        #leaderboard {
+            position: fixed;
+            display: none;
+            text-align: center;
+            color: white;
+        }
+
+        #leaderboard td {
+            text-align: left;
+            background: black;
+
         }
 
         /* responsive */
 
-        @media screen and (max-width: 480px) {
+        @media screen and (max-width: 500px) {
 
             #header {
                 font-size: 50px;
@@ -122,26 +214,166 @@
                 margin-left: 0;
             }
 
+
+            #leaderboard {
+                position: fixed;
+                width: 100%;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+            }
+
+
+            #intro,
+            #result {
+
+                left: 5%;
+            }
+
+            #intro,
+            #result,
+            #leaderboard {
+                width: 90%;
+                margin: auto;
+                overflow-y: scroll;
+            }
+
+
+            #leaderboard {
+                width: 100%;
+            }
+
+            #leaderboard table {
+                width: 90%;
+                margin: auto;
+            }
+
+            #btn_menu {
+                z-index: 99;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                border-radius: 0;
+                width: 100%;
+                margin-bottom: 0;
+                background: white;
+                color: black;
+                border-color: white;
+            }
+
+            #leaderboard_table {
+                margin-bottom: 50px;
+            }
+
+        }
+
+        @media screen and (min-width: 500px) {
+
+            #result,
+            #intro,
+            #table {
+                width: 480px;
+                left: 50%;
+            }
+
+
+            #btn_menu {
+                width: 480px;
+                margin: auto;
+                margin-bottom: 30px;
+            }
+
+            #leaderboard {
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+                overflow-y: scroll;
+            }
+
+            #leaderboard table {
+                width: 480px;
+                margin: auto;
+            }
+
+
+            #result,
+            #intro {
+                margin-left: -240px;
+                top: 5%;
+                bottom: 5%;
+            }
+
+
+
         }
     </style>
 
-
-
-
-    <div id="header">
-        <div id="score_bar">👊<span id="score">0</span></div>
-        <div id="time_bar">⏰<span id="time">0:30</span></div>
-    </div>
-
-
-    <table id="table">
-    </table>
-
-    <div id="player" class="player_normal1"
-        style="display:none;position:fixed;top:0;left:0;background-size:cover;width:70px;height:70px;">
+    <!-- style="position:fixed;left:0;right:0;top:0;bottom:0;"-->
+    <div id="intro">
+        <img src="http://i3.ytimg.com/vi/t9ewTfu3K6g/hqdefault.jpg">
+        <button onclick="startGame()" style="color:black;background:white">Jugar</button>
+        <button onclick="showLeaderboard()">🏆 Ranking</button>
 
     </div>
 
+    <div id="game" style="display:none">
+
+        <div id="header">
+            <div id="score_bar">👊<span id="score">0</span></div>
+            <div id="time_bar">⏰<span id="time">0:30</span></div>
+        </div>
+
+
+        <table id="table">
+        </table>
+
+        <div id="player" class="player_normal1"
+            style="display:none;position:fixed;top:0;left:0;background-size:cover;width:70px;height:70px;">
+
+        </div>
+
+    </div>
+
+    <!--position:fixed;left:0;right:0;top:0;bottom:0;-->
+
+    <div id="result" style="font-size:40px;text-align:center;color:white;display:none;">
+
+        <br>
+        <img src="static/end.png" width="200">
+
+        <br>
+
+        Haters silenciados<br>
+        <div id="final_score" style="color:#00ff00;font-size:100px;">0</div>
+
+        <div id="actions" style="display:none">
+            <button onclick="location.reload()">Repetir</button>
+            <button id="btn_save">Guardar puntuación</button>
+            <button onclick="showLeaderboard()">Ranking</button>
+        </div>
+
+    </div>
+
+
+    <div id="leaderboard">
+        <h2>Ranking</h2>
+        <table id="leaderboard_table" width="100%" cellpadding="5" cellspacing="1" bgcolor="white">
+            <tr>
+                <td>Pos</td>
+                <td>Nick</td>
+                <td>Pts</td>
+            </tr>
+        </table>
+        <br>
+
+        <button id="btn_menu" onclick="hideLeaderboard()" class="btn btn_primary">VOLVER</button>
+
+        <br><br><br>
+    </div>
 
 
 
@@ -161,9 +393,10 @@
 
 
     <script>
-        var time_left = 30;
+        var time_left = 2;// 30;
         var timer_time;
         var timer_enemies;
+        var game_played = false;
 
         var current_col = 0;
         var cols = 3;
@@ -288,6 +521,11 @@
 
 
         function startGame() {
+
+            game_played = true;
+
+            $('#intro').hide();
+            $('#game').show();
 
 
             var html = '';
@@ -468,16 +706,134 @@
 
 
 
+            setTimeout(function () {
+                $('#final_score').animateNumbers(score, false);
+
+                /*
+                setTimeout(function () {
+                    if (count_items >= record) {
+                        $('#record').html('RETO SUPERADO').css('color', '#00ff00');
+                    } else {
+                        $('#record').html('RETO FALLIDO').css('color', '#ff0000');
+                    }
+                }, 1000);
+                */
+
+                setTimeout(function () {
+
+
+                    if (score) {
+
+                        $('#btn_save').click(function () {
+
+                            $('#btn_save').hide();
+
+                            var nickname = prompt("¿CUAL ES TU NOMBRE? - RANKING");
+                            if (nickname) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "https://jankosspears.vivirenremoto.comDD/?action=add",
+                                    dataType: "json",
+                                    data: {
+                                        name: nickname,
+                                        score: score
+                                    },
+                                    success: function (data) {
+                                        alert('TU POSICIÓN: ' + data.rank);
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+
+                        $('#btn_save').hide();
+                    }
+
+
+                    $('#actions').show();
+
+                }, 2000);
+
+            }, 1000);
+
+
+
+            $('#game').hide();
+            $('#result').show();
+
             confetti.start();
 
             setTimeout(function () {
                 confetti.stop();
             }, 1000);
 
+
+
+
         }
 
 
-        startGame();
+
+        function showLeaderboard() {
+
+            var total_rows = $("#leaderboard_table tr").length;
+
+
+            if (total_rows == 1) {
+
+                $.getJSON("https://jankosspears.vivirenremoto.com/?action=rank", function (data) {
+                    var items = [];
+                    $.each(data, function (key, val) {
+
+                        var emoji = '';
+
+                        if (key == 0) {
+                            emoji = '🥇 ';
+                        } else if (key == 1) {
+                            emoji = '🥈 ';
+                        } else if (key == 2) {
+                            emoji = '🥉 ';
+                        } else {
+                            emoji = key + 1;
+                        }
+
+                        items.push('<tr><td width="1">' + emoji + '</td><td width="70%">' + val.name + '</td><td width="30%">' + val.score + '</td></tr>');
+                    });
+
+                    $("#leaderboard_table").append(items.join(""));
+
+
+                    confetti.start();
+
+                    setTimeout(function () {
+                        confetti.stop();
+                    }, 2000);
+
+                });
+
+            }
+
+
+
+            $('#intro').hide();
+            $('#leaderboard').show();
+
+
+            $('#leaderboard').scrollTop(0);
+        }
+
+        function hideLeaderboard() {
+
+            if (game_played) {
+                $('#result').show();
+            } else {
+                $('#intro').show();
+            }
+
+            $('#leaderboard').hide();
+        }
+
+        //startGame();
 
     </script>
 
