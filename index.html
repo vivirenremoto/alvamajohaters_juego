@@ -23,7 +23,7 @@
     <link rel="prefetch" href="static/normal1.gif" />
     <link rel="prefetch" href="static/normal2.gif" />
     <link rel="prefetch" href="static/music2.mp3" />
-    <link rel="prefetch" href="static/walking.gif" />
+    <link rel="prefetch" href="static/walking2.gif" />
     <link rel="prefetch" href="static/sound_attack1.mp3" />
     <link rel="prefetch" href="static/sound_attack2b.mp3" />
 
@@ -87,7 +87,7 @@
 
         td {
             background: red;
-            background-size: 200% auto;
+            background-size: 100% auto;
             background-repeat: no-repeat;
             background-position: center center;
             vertical-align: bottom;
@@ -129,6 +129,10 @@
             /*IE*/
         }
 
+        #player {
+            background-color: black;
+        }
+
 
         .player_normal1 {
             background-image: url('static/normal1.gif');
@@ -150,7 +154,7 @@
 
         .cell_enemy {
             background-color: white;
-            background-image: url('static/walking.gif');
+            background-image: url('static/walking2.gif');
         }
 
         .cell_normal {
@@ -290,6 +294,12 @@
                 margin-bottom: 50px;
             }
 
+
+
+            #result {
+                top: 0;
+            }
+
         }
 
         @media screen and (min-width: 500px) {
@@ -334,7 +344,12 @@
     </style>
 
     <div id="intro">
+        <a href="https://twitter.com/vivirenremoto" target="_blank"
+            style="position:fixed;right:10px;top:0;color:white;font-size:30px;text-decoration:none;">by
+            @vivirenremoto</a>
+
         <br>
+
         <img src="static/social.jpg" height="189">
         <br>
         <br>
@@ -355,7 +370,7 @@
 
         <div id="header">
             <div id="score_bar">👊<span id="score">0</span></div>
-            <div id="time_bar">⏰<span id="time">1:00</span></div>
+            <div id="time_bar">⏰<span id="time">0:30</span></div>
         </div>
 
 
@@ -370,19 +385,27 @@
     </div>
 
     <div id="result" style="display:none;">
+        <a href="https://twitter.com/vivirenremoto" target="_blank"
+            style="position:fixed;right:10px;top:0;color:white;font-size:30px;text-decoration:none;">by
+            @vivirenremoto</a>
 
         <br>
+
         <img src="static/end.png" width="200">
 
         <br>
 
         Haters silenciados<br>
-        <div id="final_score" style="color:#00ff00;font-size:100px;">0</div>
+        <div id="final_score" style="color:#00ff00;font-size:100px;line-height:90px;margin-bottom:10px;">0</div>
 
+        <div id="steam_stars" style="display:none">
+            Puntuación steam<br>
+            <div id="final_stars" style="color:#00ff00;font-size: 60px;line-height: 60px;margin-bottom: 20px;"> </div>
+        </div>
         <div id="actions" style="display:none">
             <button onclick="location.reload()">Repetir</button>
             <button id="btn_save">Guardar puntuación</button>
-            <button onclick="showLeaderboard()">Ranking</button>
+            <button onclick="showLeaderboard()">🏆 Ranking</button>
 
             Compartir
             <br>
@@ -431,9 +454,10 @@
 
 
     <script>
-        var time_left = 60;// 30;
+        var time_left = 30;
         var timer_time;
         var timer_enemies;
+        var timer_stars;
         var game_played = false;
 
         var current_col = 0;
@@ -690,9 +714,9 @@
 
 
                             if (rand_animation == 1) {
-                                $('#player').removeClass('player_normal2').addClass('player_normal1');
+                                $('#player').addClass('player_normal1').removeClass('player_normal2');
                             } else {
-                                $('#player').removeClass('player_normal1').addClass('player_normal2');
+                                $('#player').addClass('player_normal2').removeClass('player_normal1');
                             }
 
 
@@ -751,6 +775,10 @@
             setTimeout(function () {
                 $('#final_score').animateNumbers(score, false);
 
+
+
+
+
                 /*
                 setTimeout(function () {
                     if (count_items >= record) {
@@ -764,52 +792,90 @@
                 setTimeout(function () {
 
 
-                    if (score) {
 
-                        $('#btn_save').click(function () {
 
-                            $('#btn_save').hide();
 
-                            var nickname = prompt("¿CUAL ES TU NOMBRE? - RANKING");
-                            if (nickname) {
-                                $.ajax({
-                                    type: "POST",
-                                    url: "https://games.vivirenremoto.com/",
-                                    dataType: "json",
-                                    data: {
-                                        action: 'add',
-                                        game: 'alva',
-                                        name: nickname,
-                                        score: score
-                                    },
-                                    success: function (data) {
-                                        alert('TU POSICIÓN: ' + data.rank);
-                                    }
-                                });
-                            }
-                        });
-                    } else {
 
-                        $('#btn_save').hide();
+
+                    var max_score = 5;
+                    var max_stars = 5;
+                    var stars = parseInt((score * max_stars) / max_score);
+                    if (stars > max_stars) stars = max_stars;
+
+                    var index_stars = 0;
+                    var count_stars = [];
+                    for (var i = 0; i < stars; i++) {
+                        count_stars.push('★');
+                    }
+                    for (var i = 0; i < 5 - stars; i++) {
+                        count_stars.push('✰');
                     }
 
+                    $('#steam_stars').show();
 
-                    $('#actions').show();
+                    timer_stars = setInterval(function () {
 
-                }, 2000);
+                        $('#final_stars').append(count_stars[index_stars]);
 
+                        index_stars++;
+
+                        if (index_stars > 5) {
+                            clearInterval(timer_stars);
+
+                            confetti.start();
+
+                            setTimeout(function () {
+                                confetti.stop();
+                            }, 1000);
+
+                        }
+                    }, 200);
+
+
+                    setTimeout(function () {
+
+
+                        if (score) {
+
+                            $('#btn_save').click(function () {
+
+                                $('#btn_save').hide();
+
+                                var nickname = prompt("¿CUAL ES TU NOMBRE? - RANKING");
+                                if (nickname) {
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "https://games.vivirenremoto.com/",
+                                        dataType: "json",
+                                        data: {
+                                            action: 'add',
+                                            game: 'alva',
+                                            name: nickname,
+                                            score: score
+                                        },
+                                        success: function (data) {
+                                            alert('TU POSICIÓN: ' + data.rank);
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+
+                            $('#btn_save').hide();
+                        }
+
+
+                        $('#actions').show();
+
+                    }, 200 * 5);
+
+                }, 1000);
             }, 1000);
 
 
 
             $('#game').hide();
             $('#result').show();
-
-            confetti.start();
-
-            setTimeout(function () {
-                confetti.stop();
-            }, 1000);
 
 
 
