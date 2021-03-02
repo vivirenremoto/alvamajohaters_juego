@@ -20,8 +20,10 @@
 
     <link rel="prefetch" href="static/animacion1.gif" />
     <link rel="prefetch" href="static/animacion2.gif" />
+    <link rel="prefetch" href="static/animacion3.gif" />
     <link rel="prefetch" href="static/normal1.gif" />
     <link rel="prefetch" href="static/normal2.gif" />
+    <link rel="prefetch" href="static/normal3.gif" />
     <link rel="prefetch" href="static/music2.mp3" />
     <link rel="prefetch" href="static/walking.gif" />
     <link rel="prefetch" href="static/sound_attack1.mp3" />
@@ -143,6 +145,9 @@
             background-image: url('static/normal2.gif');
         }
 
+        .player_normal3 {
+            background-image: url('static/normal3.gif');
+        }
 
         .player_angry1 {
             background-image: url('static/animacion1.gif');
@@ -150,6 +155,10 @@
 
         .player_angry2 {
             background-image: url('static/animacion2.gif');
+        }
+
+        .player_angry3 {
+            background-image: url('static/animacion3.gif');
         }
 
         .cell_enemy {
@@ -357,7 +366,7 @@
 
         <div style="color:red;font-size:52px;line-height:52px;">Alva Majo VS Haters</div>
         <iframe id="video" width="560" style="border:1px #666 solid;max-width:99%;margin:20px 0;" height="315"
-            src="https://www.youtube.com/embed/ZKOripqgAmg?rel=0" frameborder="0"
+            src="https://www.youtube.com/embed/QCaFPRW02r0?rel=0" frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen></iframe>
 
@@ -458,6 +467,10 @@
         <source src="static/sound_attack2b.mp3" type="audio/mp3">
     </audio>
 
+    <audio id="sound_attack3">
+        <source src="static/sound_attack3.mp3" type="audio/mp3">
+    </audio>
+
 
 
 
@@ -477,6 +490,7 @@
         var max_enemies = total_cells - 5;// parseInt(total_cells / 3);
         var score = 0;
         var timer_player;
+        var previous_animation;
 
 
         var screen_height = $(document).height();
@@ -491,6 +505,7 @@
         var music = $('#music')[0];
         var sound_attack1 = $('#sound_attack1')[0];
         var sound_attack2 = $('#sound_attack2')[0];
+        var sound_attack3 = $('#sound_attack3')[0];
         var music_playing = false;
 
         if (document.location.href.indexOf('test') > -1) {
@@ -716,15 +731,28 @@
 
                     //$('#player').css('left', pos_x).css('top', pos_y);
 
+                    var rand_animation;
+                    var found = false;
 
-                    var rand_animation = score % 2 == 0 ? 2 : 1;// randomNumber(1, 2);
+                    while (!found) {
+                        rand_animation = randomNumber(1, 3);
+                        found = previous_animation != rand_animation;
+                    }
+
+                    previous_animation = rand_animation;
+
+
+
+                    //var rand_animation = score % 2 == 0 ? 2 : 1;// randomNumber(1, 2);
 
                     var sound;
 
                     if (rand_animation == 1) {
                         sound = sound_attack1;
-                    } else {
+                    } else if (rand_animation == 2) {
                         sound = sound_attack2;
+                    } else {
+                        sound = sound_attack3;
                     }
 
                     sound.currentTime = 0;
@@ -734,7 +762,7 @@
                     console.log(rand_animation);
 
 
-                    $('#player').removeClass('player_normal1').removeClass('player_normal2').addClass('player_angry').removeClass('player_angry1').removeClass('player_angry2').addClass('player_angry' + rand_animation);
+                    $('#player').removeClass('player_normal1').removeClass('player_normal2').removeClass('player_normal3').addClass('player_angry').removeClass('player_angry1').removeClass('player_angry2').addClass('player_angry' + rand_animation);
 
 
 
@@ -747,14 +775,19 @@
                         timer_player = setTimeout(function () {
 
 
+                            $('#player').removeClass('player_normal1').removeClass('player_normal2').removeClass('player_normal1');
+
                             if (rand_animation == 1) {
-                                $('#player').addClass('player_normal1').removeClass('player_normal2');
+                                $('#player').addClass('player_normal1');
+                            } else if (rand_animation == 2) {
+                                $('#player').addClass('player_normal2');
                             } else {
-                                $('#player').addClass('player_normal2').removeClass('player_normal1');
+                                $('#player').addClass('player_normal3');
                             }
 
 
-                            $('#player').removeClass('player_angry').removeClass('player_angry1').removeClass('player_angry2');
+
+                            $('#player').removeClass('player_angry').removeClass('player_angry1').removeClass('player_angry2').removeClass('player_angry3');
 
                         }, 900);
 
