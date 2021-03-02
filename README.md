@@ -1,7 +1,7 @@
-# Alva Majo - El lanzamiento de Pureya
+# Alva Majo VS Haters
  
 [Web - Juego](https://vivirenremoto.github.io/alvamajohaters_juego/)
 
 [Autor](https://twitter.com/vivirenremoto)
 
-![Alva Majo - El lanzamiento de Pureya](https://vivirenremoto.github.io/alvamajohaters_juego/static/social.png)
+![Alva Majo VS Haters](https://vivirenremoto.github.io/alvamajohaters_juego/static/social.png)
